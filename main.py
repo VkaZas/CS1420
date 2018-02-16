@@ -35,10 +35,10 @@ def loss_plot(ax, title, tree, pruned_tree, train_data, test_data):
 def explore_dataset(filename, class_name):
     train_data, validation_data, test_data = get_data(filename, class_name)
 
-    print('============================================================================')
-    print('Dataset: ' + filename)
-    print('---------------------------------')
-    print('Gain function: train_error()')
+    # print('============================================================================')
+    # print('Dataset: ' + filename)
+    # print('---------------------------------')
+    # print('Gain function: train_error()')
     dtree = DecisionTree(train_data, gain_function=train_error)
     dtree_pruned = DecisionTree(train_data, validation_data, gain_function=train_error)
     print('Average training loss (not-pruned): ' + str(dtree.loss(train_data)))
@@ -46,8 +46,8 @@ def explore_dataset(filename, class_name):
     print('Average training loss (pruned): ' + str(dtree_pruned.loss(train_data)))
     print('Average test loss (pruned): ' + str(dtree_pruned.loss(test_data)))
 
-    print('---------------------------------')
-    print('Gain function: entropy()')
+    # print('---------------------------------')
+    # print('Gain function: entropy()')
     dtree = DecisionTree(train_data, gain_function=entropy)
     dtree_pruned = DecisionTree(train_data, validation_data, gain_function=entropy)
     print('Average training loss (not-pruned): ' + str(dtree.loss(train_data)))
@@ -55,8 +55,8 @@ def explore_dataset(filename, class_name):
     print('Average training loss (pruned): ' + str(dtree_pruned.loss(train_data)))
     print('Average test loss (pruned): ' + str(dtree_pruned.loss(test_data)))
 
-    print('---------------------------------')
-    print('Gain function: gini_index()')
+    # print('---------------------------------')
+    # print('Gain function: gini_index()')
     dtree = DecisionTree(train_data, gain_function=gini_index)
     dtree_pruned = DecisionTree(train_data, validation_data, gain_function=gini_index)
     print('Average training loss (not-pruned): ' + str(dtree.loss(train_data)))
