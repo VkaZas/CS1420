@@ -55,6 +55,24 @@ def explore_dataset(filename, class_name):
     print('Average training loss (pruned): ' + str(dtree_pruned.loss(train_data)))
     print('Average test loss (pruned): ' + str(dtree_pruned.loss(test_data)))
 
+
+
+    # figure = plt.figure()
+    # ax = figure.add_subplot(111)
+
+    # loss_plot(ax, filename + ' losses using entropy(), max_depth=14', dtree, dtree_pruned, train_data, test_data)
+    # plt.show()
+
+    # losses = []
+    # for i in range(1, 15):
+    #     dtree = DecisionTree(train_data, gain_function=entropy, max_depth=i)
+    #     losses.append(dtree.loss(train_data))
+
+    # ax.plot(losses, label='Max_depth and losses')
+    # ax.set_xlabel('max depth')
+    # ax.set_ylabel('training loss')
+    # # plt.show()
+    #
     # print('---------------------------------')
     # print('Gain function: gini_index()')
     dtree = DecisionTree(train_data, gain_function=gini_index)
