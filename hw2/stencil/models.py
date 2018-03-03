@@ -99,7 +99,7 @@ class LogisticRegression(object):
     """
     def __init__(self, n_features, n_classes, epoch=100, decay=0.99):
         """ Initializes a LogisticRegression classifer. """
-        self.alpha = 0.1  # tune this parameter
+        self.alpha = 0.2  # tune this parameter
         self.n_features = n_features
         self.n_classes = n_classes
         self.weights = np.zeros((n_features, n_classes))
@@ -168,7 +168,7 @@ class LogisticRegression(object):
             loss = self.calc_single_loss(x, y)
             total_loss += np.linalg.norm(loss)
 
-        return total_loss
+        return total_loss / len(Y)
 
     def predict(self, inputs):
         """ Compute predictions based on the learned parameters
