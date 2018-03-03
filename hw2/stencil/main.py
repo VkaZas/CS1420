@@ -40,13 +40,11 @@ def main():
     model = NaiveBayes(10)
     model.train(data_train)
     print("{:.1f}%".format(model.accuracy(data_test) * 100))
-    print("{:.1f}%".format(model.accuracy(data_train) * 100))
 
     # run logistic regression
     model = LogisticRegression(784, 10)
     model.train(data_train)
     print("{:.1f}%".format(model.accuracy(data_test) * 100))
-    print("{:.1f}%".format(model.accuracy(data_train) * 100))
 
 
 if __name__ == "__main__":
