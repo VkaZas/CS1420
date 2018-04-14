@@ -25,7 +25,7 @@ def rbf_kernel(xj, xk, gamma = 0.1):
     return np.exp(-gamma * (np.linalg.norm(xj - xk) ** 2))
 
 
-def polynomial_kernel(xj, xk, c = 0, d = 4):
+def polynomial_kernel(xj, xk, c = 0, d = 3):
     """
     Kernel Function, polynomial kernel
 
