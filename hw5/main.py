@@ -52,7 +52,7 @@ def test_models(dataset, epochs, test_size=0.2):
 
     #### 2-Layer NN ######
     print('----- 2-Layer NN -----')
-    model = TwoLayerNN(5, activation=relu, activation_derivative=relu)
+    model = TwoLayerNN(5)
     # Use X without a bias, since we learn a bias in the 2 layer NN.
     model.train(X_train, Y_train, epochs=epochs, print_loss=False)
     print('Average Training Loss:', model.average_loss(X_train, Y_train))
