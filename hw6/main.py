@@ -94,7 +94,7 @@ def main():
 
     ### Run on MNIST #####
     # TODO: Uncomment this to run on MNIST
-    model = EMNaiveBayesClassifier(1)
+    model = EMNaiveBayesClassifier(5)
     model.train(data_train.inputs, data_train.labels, max_iters=10)
     print('Training Accuracy:', model.accuracy(data_train.inputs, data_train.labels))
     print('Testing Accuracy:', model.accuracy(data_test.inputs, data_test.labels))
