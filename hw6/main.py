@@ -56,7 +56,7 @@ def plot_parameters(model):
         for j in range(model.num_hidden):
             plt.subplot(num_classes, model.num_hidden,
                         i * model.num_hidden + j + 1)
-            plt.imshow(model.parameters[i]['bij'][j].reshape(img_shape))
+            plt.imshow(model.parameters[i]['bij'].T[j].reshape(img_shape))
     plt.show()
 
 
@@ -94,12 +94,14 @@ def main():
 
     ### Run on MNIST #####
     # TODO: Uncomment this to run on MNIST
-    # model = EMNaiveBayesClassifier(5)
-    # model.train(data_train.inputs, data_train.labels, max_iters=10)
-    # print('Training Accuracy:', model.accuracy(data_train.inputs, data_train.labels))
-    # print('Testing Accuracy:', model.accuracy(data_test.inputs, data_test.labels))
+    model = EMNaiveBayesClassifier(1)
+    model.train(data_train.inputs, data_train.labels, max_iters=10)
+    print('Training Accuracy:', model.accuracy(data_train.inputs, data_train.labels))
+    print('Testing Accuracy:', model.accuracy(data_test.inputs, data_test.labels))
 
     # TODO: Uncomment to plot the parameters
-    # plot_parameters(model)
+    plot_parameters(model)
 
 main()
+
+# 0.8861,0.8865

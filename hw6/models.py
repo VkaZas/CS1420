@@ -15,7 +15,7 @@ class EMNaiveBayesClassifier:
         '''
         self.num_hidden = num_hidden
         self.priors = None
-        self.parameters = None
+        self.parameters = []
         pass
 
     def train(self, X, Y, max_iters=10, eps=1e-4):
@@ -37,9 +37,14 @@ class EMNaiveBayesClassifier:
                 eps, then we should stop running the algorithm.
             :return None
         '''
-        # TODO
+        data_size, feat_size = X.shape
+        Y_cnt = np.unique(Y, return_counts=True)[1]
+        self.priors = Y_cnt / float(data_size)
 
-        pass
+        for i in range(len(Y_cnt)):
+            X_i = X[Y == i]
+            bij, bjy = self._em_algorithm(X_i, self.num_hidden, max_iters, eps)
+            self.parameters.append({'bij': bij, 'bjy': bjy})
 
     def _em_algorithm(self, X, num_hidden, max_iters, eps):
         '''
@@ -52,9 +57,28 @@ class EMNaiveBayesClassifier:
                 eps, then we should stop running the algorithm.
             :return the learned parameters as a tuple (b^ij,b^jy)
         '''
-        # TODO
+        data_size, feat_size = X.shape
+        bjy = np.random.uniform(0.0, 1.0, self.num_hidden)
+        bij = np.random.uniform(0.0, 1.0, (feat_size, self.num_hidden))
+        Qxj = np.random.uniform(0.0, 1.0, (data_size, num_hidden))
 
-        pass
+        for i in range(max_iters):
+            # print(i)
+            Q_next = self._e_step(X, num_hidden, bjy, bij)
+            if np.max(np.abs(Qxj - Q_next)) < eps:
+                break
+            Qxj = Q_next
+
+            bij_next, bjy_next = self._m_step(X, num_hidden, Qxj)
+            if np.max(np.abs(bij - bij_next)) < eps and np.max(np.abs(bjy - bjy_next)) < eps:
+                break
+            bij = bij_next
+            bjy = bjy_next
+        return bij, bjy
+
+    def _log(self, a):
+        a = np.where(a < 1e-8, 1e-8, a)
+        return np.log(a)
 
     def _e_step(self, X, num_hidden, bjy, bij):
         '''
@@ -67,9 +91,16 @@ class EMNaiveBayesClassifier:
             :param bij at the current iteration (b^ij = P(x_i | h^j, y))
             :return Q(t+1)
         '''
-        # TODO
 
-        pass
+        bij_x = np.sum(
+            X[:, :, None] * self._log(bij[None, :, :] + (1 - X[:, :, None]) * self._log(1.0 - bij[None, :, :])),
+            axis=1)
+        numerator = bij_x + self._log(bjy[None, :])
+        a = np.max(numerator, axis=1)
+        denominator = a + self._log(np.sum(np.exp(numerator - a[:, None]), axis=1))
+
+        return np.exp(numerator - denominator[:, None])
+
 
     def _m_step(self, X, num_hidden, probs):
         '''
@@ -81,9 +112,13 @@ class EMNaiveBayesClassifier:
             :param probs (Q(t))
             :return theta(t+1) as a tuple (b^ij,b^jy)
         '''
-        # TODO
 
-        pass
+        bjy = np.mean(probs, axis=0)
+        numerator = np.sum(X[:, :, None] * probs[:, None, :], axis=0)
+        denominator = np.sum(probs, axis=0)[None, :]
+        bij = numerator / denominator
+
+        return bij, bjy
 
     def predict(self, X):
         '''
@@ -94,9 +129,18 @@ class EMNaiveBayesClassifier:
         :param X 2D Numpy array. Each row contains an example.
         :return A 1D Numpy array where each element contains a prediction 0 or 1.
         '''
-        # TODO
+        res = []
 
-        pass
+        for y in [0, 1]:
+            bij = self.parameters[y]['bij']
+            bjy = self.parameters[y]['bjy']
+            bij_x = np.sum(
+                X[:, :, None] * self._log(bij[None, :, :]) + (1 - X[:, :, None]) * self._log(1 - bij[None, :, :]),
+                axis=1)
+            pred = self.priors[y] * np.sum(bjy[None, :] * np.exp(bij_x), axis=1)
+            res.append(pred)
+
+        return np.argmax(np.array(res), axis=0)
 
     def accuracy(self, X, Y):
         '''
